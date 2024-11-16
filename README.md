@@ -7,3 +7,5 @@ Another clone of this game. Compiled for Android 12. WIP.
 - Changing number of colors
 - Changing colors - not implemented yet
 - Changing numbers of balls added with each turn - doesn't work
+- Remembering state of the game after closing
+- Statistics
