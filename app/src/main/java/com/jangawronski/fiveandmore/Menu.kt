@@ -31,6 +31,7 @@ fun Menu(showDialog: MutableState<Boolean>, width: MutableState<Int>, height: Mu
         title = { Text("Settings") },
         text = {
             Column {
+                /*
                 Text("Width")
                 Slider(
                     value = widthState.floatValue,
@@ -52,12 +53,12 @@ fun Menu(showDialog: MutableState<Boolean>, width: MutableState<Int>, height: Mu
                     value = heightState.floatValue.toInt().toString(),
                     onValueChange = { heightState.floatValue = it.toFloatOrNull() ?: heightState.floatValue }
                 )
-
+                */
                 Text("Win Length")
                 Slider(
                     value = winLengthState.floatValue,
                     onValueChange = { winLengthState.floatValue = it },
-                    valueRange = 1f..100f
+                    valueRange = 1f..9f
                 )
                 TextField(
                     value = winLengthState.floatValue.toInt().toString(),
@@ -68,23 +69,25 @@ fun Menu(showDialog: MutableState<Boolean>, width: MutableState<Int>, height: Mu
                 Slider(
                     value = nColorsState.floatValue,
                     onValueChange = { nColorsState.floatValue = it },
-                    valueRange = 1f..100f
+                    valueRange = 1f..26f
                 )
                 TextField(
                     value = nColorsState.floatValue.toInt().toString(),
                     onValueChange = { nColorsState.floatValue = it.toFloatOrNull() ?: nColorsState.floatValue }
                 )
-
+                /*
                 Text("Number of Next Colors")
                 Slider(
                     value = nNextColorsState.floatValue,
                     onValueChange = { nNextColorsState.floatValue = it },
-                    valueRange = 1f..100f
+                    valueRange = 1f..10f
                 )
                 TextField(
                     value = nNextColorsState.floatValue.toInt().toString(),
                     onValueChange = { nNextColorsState.floatValue = it.toFloatOrNull() ?: nNextColorsState.floatValue }
                 )
+
+                 */
             }
         },
         confirmButton = {

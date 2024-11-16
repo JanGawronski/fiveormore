@@ -25,11 +25,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.Canvas
+import androidx.compose.material.icons.filled.Settings
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(nextColors: Array<MutableIntState>, score: MutableIntState, onStart: () -> Unit, onMenuClick: () -> Unit, onRetry: () -> Unit) {
+fun TopBar(nextColors: Array<MutableIntState>, score: MutableIntState, onStart: () -> Unit, onMenuClick: () -> Unit, onRetry: () -> Unit, onStatsClick: () -> Unit) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -61,17 +62,25 @@ fun TopBar(nextColors: Array<MutableIntState>, score: MutableIntState, onStart: 
                     IconButton(onClick = onRetry) {
                         Icon(
                             imageVector = Icons.Filled.Refresh,
-                            contentDescription = "Localized description"
+                            contentDescription = "Retry"
                         )
                     }
                     else
                         IconButton(onClick = onMenuClick) {
                             Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "Localized description"
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Settings"
                             )
                         }
                 },
+                navigationIcon = {
+                    IconButton(onClick = onStatsClick) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Stats"
+                        )
+                    }
+                }
             )
         },
     ) {}
