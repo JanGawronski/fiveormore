@@ -1,6 +1,5 @@
 package com.jangawronski.fiveandmore
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -21,20 +20,22 @@ fun GameGrid(modifier: Modifier = Modifier) {
     val nNextColors = remember { mutableIntStateOf(3) }
     val screenWidth = configuration.screenWidthDp.dp
     val cellSize = remember { mutableStateOf(screenWidth / columns.intValue) }
-    var cellColors = remember { Array(rows.intValue * columns.intValue) { mutableIntStateOf(-1) } }
-    var nextColors = remember { Array(nNextColors.intValue) { mutableIntStateOf(-1) } }
+    val cellColors = remember { Array(rows.intValue * columns.intValue) { mutableIntStateOf(-1) } }
+    val nextColors = remember { Array(nNextColors.intValue) { mutableIntStateOf(-1) } }
     val score = remember { mutableIntStateOf(0) }
     val chosen1 = remember { mutableIntStateOf(-1) }
     val chosen2 = remember { mutableIntStateOf(-1) }
     val isWin = remember { mutableStateOf(false) }
-    val showMenuDialog = remember { mutableStateOf(false) }
     val showEndDialog = remember { mutableStateOf(false) }
-    val showStatsDialog = remember { mutableStateOf(false) }
     val leaderBoard = remember { Array(10) { mutableIntStateOf(-1) } }
     val nGames = remember { mutableIntStateOf(0) }
     val nWins = remember { mutableIntStateOf(0) }
     val nLosses = remember { mutableIntStateOf(0) }
     val pointsScored = remember { mutableIntStateOf(0) }
+    val stats = Stats(leaderBoard, nGames, nWins, nLosses, pointsScored)
+    stats.Display()
+    val menu = Menu(rows, columns, winLength, nColors, nNextColors)
+    menu.Display()
 
     LaunchedEffect(Unit) {
         restoreGameState(context, cellColors, nextColors, score, rows, columns, winLength, nColors, nNextColors, leaderBoard, nGames, nWins, nLosses, pointsScored)
@@ -74,13 +75,6 @@ fun GameGrid(modifier: Modifier = Modifier) {
     }
 
 
-    Menu(showMenuDialog, rows, columns, winLength, nColors, nNextColors) {
-        showMenuDialog.value = false
-        //cellSize.value = screenWidth / columns.intValue
-        //cellColors = Array(rows.intValue * columns.intValue) { mutableIntStateOf(-1) }
-        //nextColors = Array(nNextColors.intValue) { mutableIntStateOf(-1) }
-    }
-
 
 
 
@@ -101,10 +95,6 @@ fun GameGrid(modifier: Modifier = Modifier) {
         saveGameState(context, cellColors, nextColors, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
     }
 
-    Stats(showStatsDialog, leaderBoard, nGames, nWins, nLosses, pointsScored) {
-        showStatsDialog.value = false
-    }
-
 
     TopBar(nextColors, score, onStart = {
         nGames.intValue += 1
@@ -123,7 +113,7 @@ fun GameGrid(modifier: Modifier = Modifier) {
             showEndDialog.value = true
         } },
         onMenuClick = {
-            showMenuDialog.value = true
+            menu.show()
         },
         onRetry = {
             for (item in cellColors)
@@ -136,7 +126,7 @@ fun GameGrid(modifier: Modifier = Modifier) {
             saveGameState(context, cellColors, nextColors, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
         },
         onStatsClick = {
-            showStatsDialog.value = true
+            stats.show()
         })
 
     GameGrid(rows, columns, modifier, cellColors, chosen1, chosen2, cellSize)
