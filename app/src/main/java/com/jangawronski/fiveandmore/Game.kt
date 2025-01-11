@@ -2,8 +2,6 @@ package com.jangawronski.fiveandmore
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.MutableIntState
 import kotlin.random.Random
 import androidx.compose.ui.platform.LocalContext
@@ -12,14 +10,11 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun GameGrid(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val configuration = LocalConfiguration.current
     val rows = remember { mutableIntStateOf(9) }
     val columns = remember { mutableIntStateOf(9) }
     val winLength = remember { mutableIntStateOf(5) }
     val nColors = remember { mutableIntStateOf(6) }
     val nNextColors = remember { mutableIntStateOf(3) }
-    val screenWidth = configuration.screenWidthDp.dp
-    val cellSize = remember { mutableStateOf(screenWidth / columns.intValue) }
     val cellColors = remember { Array(rows.intValue * columns.intValue) { mutableIntStateOf(-1) } }
     val nextColors = remember { Array(nNextColors.intValue) { mutableIntStateOf(-1) } }
     val score = remember { mutableIntStateOf(0) }
@@ -36,6 +31,8 @@ fun GameGrid(modifier: Modifier = Modifier) {
     stats.Display()
     val menu = Menu(rows, columns, winLength, nColors, nNextColors)
     menu.Display()
+    val gameGrid = GameGrid(rows, columns, modifier, cellColors, chosen1, chosen2)
+
 
     LaunchedEffect(Unit) {
         restoreGameState(context, cellColors, nextColors, score, rows, columns, winLength, nColors, nNextColors, leaderBoard, nGames, nWins, nLosses, pointsScored)
@@ -73,8 +70,6 @@ fun GameGrid(modifier: Modifier = Modifier) {
         chosen2.intValue = -1
         saveGameState(context, cellColors, nextColors, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
     }
-
-
 
 
 
@@ -129,7 +124,8 @@ fun GameGrid(modifier: Modifier = Modifier) {
             stats.show()
         })
 
-    GameGrid(rows, columns, modifier, cellColors, chosen1, chosen2, cellSize)
+    gameGrid.Display()
+
 
 }
 

@@ -34,29 +34,29 @@ class Menu(
                 onDismissRequest = { hide() },
                 title = { Text("Settings") },
                 text = {
-                    Column {                /*
-                    Text("Width")
-                    Slider(
-                        value = widthState.floatValue,
-                        onValueChange = { widthState.floatValue = it },
-                        valueRange = 1f..100f
-                    )
-                    TextField(
-                        value = widthState.floatValue.toInt().toString(),
-                        onValueChange = { widthState.floatValue = it.toFloatOrNull() ?: widthState.floatValue }
-                    )
+                    Column {
+                        Text("Width")
+                        Slider(
+                            value = widthState.floatValue,
+                            onValueChange = { widthState.floatValue = it },
+                            valueRange = 1f..100f
+                        )
+                        TextField(
+                            value = widthState.floatValue.toInt().toString(),
+                            onValueChange = { widthState.floatValue = it.toFloatOrNull() ?: widthState.floatValue }
+                        )
 
-                    Text("Height")
-                    Slider(
-                        value = heightState.floatValue,
-                        onValueChange = { heightState.floatValue = it },
-                        valueRange = 1f..100f
-                    )
-                    TextField(
-                        value = heightState.floatValue.toInt().toString(),
-                        onValueChange = { heightState.floatValue = it.toFloatOrNull() ?: heightState.floatValue }
-                    )
-                    */
+                        Text("Height")
+                        Slider(
+                            value = heightState.floatValue,
+                            onValueChange = { heightState.floatValue = it },
+                            valueRange = 1f..100f
+                        )
+                        TextField(
+                            value = heightState.floatValue.toInt().toString(),
+                            onValueChange = { heightState.floatValue = it.toFloatOrNull() ?: heightState.floatValue }
+                        )
+
                         Text("Win Length")
                         Slider(
                             value = winLengthState.floatValue,
@@ -78,7 +78,7 @@ class Menu(
                             value = nColorsState.floatValue.toInt().toString(),
                             onValueChange = { nColorsState.floatValue = it.toFloatOrNull() ?: nColorsState.floatValue }
                         )
-                        /*
+
                         Text("Number of Next Colors")
                         Slider(
                             value = nNextColorsState.floatValue,
@@ -89,8 +89,6 @@ class Menu(
                             value = nNextColorsState.floatValue.toInt().toString(),
                             onValueChange = { nNextColorsState.floatValue = it.toFloatOrNull() ?: nNextColorsState.floatValue }
                         )
-
-                         */
                     }
                 },
                 confirmButton = {

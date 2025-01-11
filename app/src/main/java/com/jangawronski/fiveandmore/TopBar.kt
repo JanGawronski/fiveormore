@@ -44,7 +44,7 @@ fun TopBar(nextColors: Array<MutableIntState>, score: MutableIntState, onStart: 
                             Text("Score: ${score.intValue}")
                             Spacer(modifier = Modifier.width(8.dp))
                             nextColors.forEach { colorState ->
-                                ColorCircle(color = getColorByIndex(colorState.intValue), size = 24.dp)
+                                ColorCircle(color = Cell.getColorByIndex(colorState.intValue), size = 24.dp)
                                 Spacer(modifier = Modifier.width(4.dp))
                             }
                         }
