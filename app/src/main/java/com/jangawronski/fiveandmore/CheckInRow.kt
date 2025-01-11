@@ -3,6 +3,8 @@ package com.jangawronski.fiveandmore
 import androidx.compose.runtime.MutableIntState
 
 fun checkInRow(cellColors: Array<MutableIntState>, rows: Int, columns: Int, score: MutableIntState, winLength: Int) {
+    val grid = Array(rows) { BooleanArray(columns) }
+
     for (i in 0 until rows) {
         var j = 0
         while (j < columns) {
@@ -11,9 +13,8 @@ fun checkInRow(cellColors: Array<MutableIntState>, rows: Int, columns: Int, scor
                 k += 1
             }
             if (k - j >= winLength && cellColors[i * columns + j].intValue != -1) {
-                score.intValue += k - j
                 for (l in j until k) {
-                    cellColors[i * columns + l].intValue = -1
+                    grid[i][l] = true
                 }
             }
             j = k
@@ -27,9 +28,8 @@ fun checkInRow(cellColors: Array<MutableIntState>, rows: Int, columns: Int, scor
                 k += 1
             }
             if (k - j >= winLength && cellColors[j * columns + i].intValue != -1) {
-                score.intValue += k - j
                 for (l in j until k) {
-                    cellColors[l * columns + i].intValue = -1
+                    grid[l][i] = true
                 }
             }
             j = k
@@ -43,9 +43,8 @@ fun checkInRow(cellColors: Array<MutableIntState>, rows: Int, columns: Int, scor
                 k += 1
             }
             if (k >= winLength && cellColors[i * columns + j].intValue != -1) {
-                score.intValue += k
                 for (l in 0 until k) {
-                    cellColors[(i + l) * columns + (j + l)].intValue = -1
+                    grid[i + l][j + l] = true
                 }
             }
         }
@@ -59,10 +58,18 @@ fun checkInRow(cellColors: Array<MutableIntState>, rows: Int, columns: Int, scor
                 k += 1
             }
             if (k >= winLength && cellColors[i * columns + j].intValue != -1) {
-                score.intValue += k
                 for (l in 0 until k) {
-                    cellColors[(i + l) * columns + (j - l)].intValue = -1
+                    grid[i + l][j - l] = true
                 }
+            }
+        }
+    }
+
+    for (i in 0 until rows) {
+        for (j in 0 until columns) {
+            if (grid[i][j]) {
+                score.intValue += 1
+                cellColors[i * columns + j].intValue = -1
             }
         }
     }
