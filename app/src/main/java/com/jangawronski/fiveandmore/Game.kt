@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 
 
 @Composable
-fun GameGrid(modifier: Modifier = Modifier) {
+fun Game(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val rows = remember { mutableIntStateOf(9) }
     val columns = remember { mutableIntStateOf(9) }

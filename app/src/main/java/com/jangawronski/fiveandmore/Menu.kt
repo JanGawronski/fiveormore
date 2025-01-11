@@ -57,18 +57,18 @@ class Menu(
                             onValueChange = { heightState.floatValue = it.toFloatOrNull() ?: heightState.floatValue }
                         )
 
-                        Text("Win Length")
+                        Text("Number of marbles in row to score")
                         Slider(
                             value = winLengthState.floatValue,
                             onValueChange = { winLengthState.floatValue = it },
-                            valueRange = 1f..9f
+                            valueRange = 1f..20f
                         )
                         TextField(
                             value = winLengthState.floatValue.toInt().toString(),
                             onValueChange = { winLengthState.floatValue = it.toFloatOrNull() ?: winLengthState.floatValue }
                         )
 
-                        Text("Number of Colors")
+                        Text("Number of colors")
                         Slider(
                             value = nColorsState.floatValue,
                             onValueChange = { nColorsState.floatValue = it },
@@ -79,7 +79,7 @@ class Menu(
                             onValueChange = { nColorsState.floatValue = it.toFloatOrNull() ?: nColorsState.floatValue }
                         )
 
-                        Text("Number of Next Colors")
+                        Text("Number of marbles added after each move")
                         Slider(
                             value = nNextColorsState.floatValue,
                             onValueChange = { nNextColorsState.floatValue = it },

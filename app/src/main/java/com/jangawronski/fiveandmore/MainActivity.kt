@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                             .padding(innerPadding),
                         contentAlignment = Alignment.Center
                     ) {
-                        GameGrid(
+                        Game(
                             modifier = Modifier
                         )
                     }
