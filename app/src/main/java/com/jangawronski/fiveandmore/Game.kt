@@ -15,8 +15,14 @@ fun GameGrid(modifier: Modifier = Modifier) {
     val winLength = remember { mutableIntStateOf(5) }
     val nColors = remember { mutableIntStateOf(6) }
     val nNextColors = remember { mutableIntStateOf(3) }
-    val cellColors = remember { Array(rows.intValue * columns.intValue) { mutableIntStateOf(-1) } }
-    val nextColors = remember { Array(nNextColors.intValue) { mutableIntStateOf(-1) } }
+    val cellColors = remember { derivedStateOf {
+        Array(rows.intValue * columns.intValue) {
+            mutableIntStateOf(
+                -1
+            )
+        }
+    } }
+    val nextColors = remember { derivedStateOf { Array(nNextColors.intValue) { mutableIntStateOf(-1) } }}
     val score = remember { mutableIntStateOf(0) }
     val chosen1 = remember { mutableIntStateOf(-1) }
     val chosen2 = remember { mutableIntStateOf(-1) }
@@ -29,32 +35,31 @@ fun GameGrid(modifier: Modifier = Modifier) {
     val pointsScored = remember { mutableIntStateOf(0) }
     val stats = Stats(leaderBoard, nGames, nWins, nLosses, pointsScored)
     stats.Display()
-    val menu = Menu(rows, columns, winLength, nColors, nNextColors)
+    val menu = Menu(columns, rows, winLength, nColors, nNextColors)
     menu.Display()
-    val gameGrid = GameGrid(rows, columns, modifier, cellColors, chosen1, chosen2)
+    val gameGrid = GameGrid(rows, columns, modifier, cellColors.value, chosen1, chosen2)
 
 
     LaunchedEffect(Unit) {
-        restoreGameState(context, cellColors, nextColors, score, rows, columns, winLength, nColors, nNextColors, leaderBoard, nGames, nWins, nLosses, pointsScored)
+        restoreGameState(context, cellColors.value, nextColors.value, score, rows, columns, winLength, nColors, nNextColors, leaderBoard, nGames, nWins, nLosses, pointsScored)
     }
 
-
     if (chosen1.intValue != -1 && chosen2.intValue != -1) {
-        if (isMovePossible(chosen1.intValue, chosen2.intValue, rows.intValue, columns.intValue, cellColors)) {
-            cellColors[chosen2.intValue].intValue = cellColors[chosen1.intValue].intValue
-            cellColors[chosen1.intValue].intValue = -1
+        if (isMovePossible(chosen1.intValue, chosen2.intValue, rows.intValue, columns.intValue, cellColors.value)) {
+            cellColors.value[chosen2.intValue].intValue = cellColors.value[chosen1.intValue].intValue
+            cellColors.value[chosen1.intValue].intValue = -1
 
             val previousScore = score.intValue
-            checkInRow(cellColors, rows.intValue, columns.intValue, score, winLength.intValue)
+            checkInRow(cellColors.value, rows.intValue, columns.intValue, score, winLength.intValue)
             if (previousScore == score.intValue) {
-                addColors(cellColors, nextColors)
-                changeColors(nColors.intValue, nextColors)
+                addColors(cellColors.value, nextColors.value)
+                changeColors(nColors.intValue, nextColors.value)
             }
-            checkInRow(cellColors, rows.intValue, columns.intValue, score, winLength.intValue)
+            checkInRow(cellColors.value, rows.intValue, columns.intValue, score, winLength.intValue)
             pointsScored.intValue += score.intValue - previousScore
         }
 
-        val result = isGameIsOver(cellColors, rows.intValue, columns.intValue, score)
+        val result = isGameIsOver(cellColors.value, rows.intValue, columns.intValue, score)
         if (result == -1) {
             nLosses.intValue += 1
             isWin.value = false
@@ -68,7 +73,7 @@ fun GameGrid(modifier: Modifier = Modifier) {
 
         chosen1.intValue = -1
         chosen2.intValue = -1
-        saveGameState(context, cellColors, nextColors, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
+        saveGameState(context, cellColors.value, nextColors.value, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
     }
 
 
@@ -80,26 +85,26 @@ fun GameGrid(modifier: Modifier = Modifier) {
             leaderBoard.sortByDescending { it.intValue }
         }
 
-        for (item in cellColors)
+        for (item in cellColors.value)
             item.intValue = -1
-        for (item in nextColors)
+        for (item in nextColors.value)
             item.intValue = -1
         chosen1.intValue = -1
         chosen2.intValue= -1
         score.intValue = 0
-        saveGameState(context, cellColors, nextColors, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
+        saveGameState(context, cellColors.value, nextColors.value, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
     }
 
 
-    TopBar(nextColors, score, onStart = {
+    TopBar(nextColors.value, score, onStart = {
         nGames.intValue += 1
-        changeColors(nColors.intValue, nextColors)
-        addColors(cellColors, nextColors)
-        changeColors(nColors.intValue, nextColors)
+        changeColors(nColors.intValue, nextColors.value)
+        addColors(cellColors.value, nextColors.value)
+        changeColors(nColors.intValue, nextColors.value)
         val previousScore = score.intValue
-        checkInRow(cellColors, rows.intValue, columns.intValue, score, winLength.intValue)
+        checkInRow(cellColors.value, rows.intValue, columns.intValue, score, winLength.intValue)
         pointsScored.intValue += score.intValue - previousScore
-        val result = isGameIsOver(cellColors, rows.intValue, columns.intValue, score)
+        val result = isGameIsOver(cellColors.value, rows.intValue, columns.intValue, score)
         if (result == -1) {
             isWin.value = false
             showEndDialog.value = true
@@ -111,21 +116,20 @@ fun GameGrid(modifier: Modifier = Modifier) {
             menu.show()
         },
         onRetry = {
-            for (item in cellColors)
+            for (item in cellColors.value)
                 item.intValue = -1
-            for (item in nextColors)
+            for (item in nextColors.value)
                 item.intValue = -1
             chosen1.intValue = -1
             chosen2.intValue= -1
             score.intValue = 0
-            saveGameState(context, cellColors, nextColors, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
+            saveGameState(context, cellColors.value, nextColors.value, score.intValue, rows.intValue, columns.intValue, winLength.intValue, nColors.intValue, nNextColors.intValue, leaderBoard, nGames.intValue, nWins.intValue, nLosses.intValue, pointsScored.intValue)
         },
         onStatsClick = {
             stats.show()
         })
 
     gameGrid.Display()
-
 
 }
 

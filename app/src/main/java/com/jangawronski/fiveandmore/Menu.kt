@@ -17,7 +17,7 @@ class Menu(
     private val height: MutableState<Int>,
     private val winLength: MutableState<Int>,
     private val nColors: MutableState<Int>,
-    private val nNextColors: MutableState<Int>,
+    private val nNextColors: MutableState<Int>
 ) {
     private val showDialog: MutableState<Boolean> = mutableStateOf(false)
 
@@ -39,7 +39,7 @@ class Menu(
                         Slider(
                             value = widthState.floatValue,
                             onValueChange = { widthState.floatValue = it },
-                            valueRange = 1f..100f
+                            valueRange = 1f..20f
                         )
                         TextField(
                             value = widthState.floatValue.toInt().toString(),
@@ -50,7 +50,7 @@ class Menu(
                         Slider(
                             value = heightState.floatValue,
                             onValueChange = { heightState.floatValue = it },
-                            valueRange = 1f..100f
+                            valueRange = 1f..20f
                         )
                         TextField(
                             value = heightState.floatValue.toInt().toString(),

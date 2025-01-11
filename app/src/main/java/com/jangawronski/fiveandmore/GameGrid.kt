@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.runtime.MutableIntState
 
+
 class GameGrid(
     private val rows: MutableIntState,
     private val columns: MutableIntState,
